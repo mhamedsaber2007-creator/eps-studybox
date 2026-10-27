@@ -1,48 +1,127 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#153e35">
-<title>EPS StudyBox — المزامنة</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EPS StudyBox</title>
+<meta name="theme-color" content="#153e35">
 <style>
-:root{--green:#153e35;--green2:#245b4e;--gold:#d8b66b;--bg:#f5f4ef;--ink:#17231f;--muted:#66756e;--line:#dce4df}*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink)}header{background:linear-gradient(135deg,var(--green),var(--green2));color:white;padding:24px 16px 34px;border-bottom:4px solid var(--gold)}.wrap{max-width:1100px;margin:auto;padding:0 15px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{font-size:12px;letter-spacing:1.5px;color:#f0dba7;font-weight:bold}h1{margin:12px 0 7px;font-size:clamp(28px,5vw,42px)}header p{margin:0;color:#e0eae5;line-height:1.7}main{margin-top:-17px;padding-bottom:35px}.toolbar,.syncbar{background:white;border:1px solid var(--line);border-radius:15px;padding:12px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;box-shadow:0 6px 20px #173d3010}input,textarea{font:inherit;width:100%;padding:11px;border:1px solid #ccd8d1;border-radius:10px;background:#fff;color:var(--ink)}#search{flex:1;min-width:180px}button{font:inherit;font-weight:bold;border:0;border-radius:10px;padding:10px 13px;cursor:pointer}.primary{background:var(--green);color:white}.soft{background:#edf3ef;color:var(--green)}.danger{background:#fff0ed;color:#a43b2c}.syncbar{margin-top:10px;justify-content:space-between}.status{font-size:13px;color:var(--muted);line-height:1.6}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:24px 0 13px}.section-head h2{margin:0;color:var(--green);font-size:21px}.muted{color:var(--muted);font-size:13px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}.emoji{font-size:27px}.card h3{margin:0;font-size:18px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;white-space:pre-wrap}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}.actions button{font-size:12px;padding:9px}.count{font-size:12px;color:var(--green);background:#edf3ef;padding:5px 8px;border-radius:20px;align-self:flex-start}.summary-list{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}.summary-row{display:flex;align-items:center;justify-content:space-between;gap:7px}.summary-row span{font-size:13px}.empty{border:1px dashed #b9c9c0;padding:25px;text-align:center;border-radius:14px;color:var(--muted);background:#ffffff80}.modal{display:none;position:fixed;inset:0;background:#0b211bcc;z-index:5;align-items:center;justify-content:center;padding:14px}.modal.open{display:flex}.dialog{width:min(680px,100%);max-height:92vh;overflow:auto;background:white;border-radius:17px;padding:20px}.dialog h2{margin:0 0 16px;color:var(--green)}label{display:block;font-weight:bold;font-size:14px;margin:13px 0 7px}textarea{min-height:200px;resize:vertical;line-height:1.7}.dialog-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.reader{white-space:pre-wrap;line-height:1.9;background:#fafbf9;padding:15px;border-radius:12px;border:1px solid var(--line);min-height:120px}.hide{display:none!important}footer{text-align:center;padding:18px;color:var(--muted);font-size:12px}@media(max-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.cards{grid-template-columns:1fr}.toolbar>*{width:100%}.syncbar{align-items:stretch}.syncbar>*{width:100%}}
-</style></head><body>
-<header><div class="wrap"><div class="top"><div class="brand">ÉTUDE • ORGANISATION • RÉVISION</div><div style="font-size:13px;color:#e7eee9">نسخة شخصية</div></div><h1>EPS StudyBox</h1><p>Google + Realtime Database للمزامنة بين التليفون والـ PC بنفس الحساب.</p></div></header>
-<main class="wrap">
- <div class="toolbar"><input id="search" placeholder="🔎 قلّب على Module أو résumé..."><button class="primary" id="addModule">＋ مادة جديدة</button><button class="soft" id="exportBtn">تصدير JSON</button><button class="soft" id="importBtn">استيراد نسخة</button><input class="hide" type="file" id="importFile" accept=".json"></div>
- <div class="syncbar"><div><b id="syncEmail">غير مربوط بحساب Google</b><div class="status" id="syncStatus">كنحمّل...</div></div><button class="primary" id="loginBtn">☁️ ربط Google والمزامنة</button></div>
- <div class="section-head"><h2>مواد EPS ديالك</h2><span class="muted" id="total">0 modules</span></div><div class="cards" id="cards"></div><div id="empty" class="empty hide">ما كاين حتى Module بهاد البحث.</div>
-</main><footer>EPS StudyBox · متزامن مع Realtime DB</footer>
-<div class="modal" id="moduleModal"><div class="dialog"><h2 id="moduleTitle">مادة جديدة</h2><label>اسم المادة</label><input id="moduleName"><label>وصف</label><input id="moduleDesc"><div class="dialog-actions"><button class="primary" id="saveModule">حفظ المادة</button><button class="soft" data-close="moduleModal">إلغاء</button></div></div></div>
-<div class="modal" id="summaryModal"><div class="dialog"><h2 id="summaryTitle">Résumé</h2><label>عنوان</label><input id="summaryName"><label>محتوى</label><textarea id="summaryBody"></textarea><div class="dialog-actions"><button class="primary" id="saveSummary">حفظ الملخص</button><button class="soft" data-close="summaryModal">إلغاء</button></div></div></div>
-<div class="modal" id="readerModal"><div class="dialog"><h2 id="readerTitle">Résumé</h2><div class="reader" id="readerBody"></div><div class="dialog-actions"><button class="soft" id="editFromReader">تعديل</button><button class="danger" id="deleteFromReader">حذف</button><button class="primary" data-close="readerModal">إغلاق</button></div></div></div>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script>
-'use strict';
-const KEY='epsStudyBox_v1';
-const DB_URL='https://eps-studybox-default-rtdb.europe-west1.firebasedatabase.app';
-const firebaseConfig={apiKey:"AIzaSyBn6SY4K3JX9VFebs-YpxjzvPuEOk7bZEQ",authDomain:"eps-studybox.firebaseapp.com",projectId:"eps-studybox",storageBucket:"eps-studybox.firebasestorage.app",messagingSenderId:"873490334885",appId:"1:873490334885:web:abbf1ba26c1b6fbc67b94c",databaseURL:DB_URL};
-const starter=[{name:'Gymnastique',desc:'Logique interne, enjeux',icon:'🤸'},{name:'Athlétisme',desc:'Courses, sauts, lancers',icon:'🏃'},{name:'Handball',desc:'Règles, techniques',icon:'🤾'},{name:'Bioénergétique',desc:'ATP, substrats',icon:'⚡'},{name:'Didactique / Pédagogie',desc:'Objectifs, situations',icon:'📚'},{name:'Volleyball',desc:'Techniques, règles',icon:'🏐'},{name:'Basketball',desc:'Dribble, passe, tir',icon:'🏀'}].map(m=>({...m,id:makeId(),summaries:[]}));
-function makeId(){return crypto.randomUUID?crypto.randomUUID():'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)}
-function normalize(list){if(!Array.isArray(list))return null;return list.filter(m=>m&&m.name).map(m=>({...m,id:m.id||makeId(),name:m.name,desc:m.desc||'',icon:m.icon||'📘',summaries:Array.isArray(m.summaries)?m.summaries.filter(s=>s&&s.title).map(s=>({...s,id:s.id||makeId(),title:s.title,body:s.body||''})):[]}))}
-let modules;try{modules=normalize(JSON.parse(localStorage.getItem(KEY)||'null'))||starter}catch(e){modules=starter}
-let editModuleId=null,summaryModuleId=null,editSummaryId=null,readerModuleId=null,readerSummaryId=null;
-let fbApp=null,fbAuth=null,fbDb=null,currentUser=null,remoteReady=false,writeTimer=null,remoteListener=null,applyingRemote=false;
-function setStatus(t){document.getElementById('syncStatus').textContent=t}
-function saveLocal(){localStorage.setItem(KEY,JSON.stringify(modules))}
-function persist(){saveLocal();if(currentUser&&remoteReady&&!applyingRemote){clearTimeout(writeTimer);setStatus('كنحفظ فالسحابة...');writeTimer=setTimeout(async()=>{try{await fbDb.ref('users/'+currentUser.uid+'/modules').set(modules);setStatus('متزامن مع Firebase ✓');}catch(e){setStatus('فشل: '+e.message)}},600)}}
-function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function render(){const q=document.getElementById('search').value.trim().toLowerCase(),list=document.getElementById('cards');list.innerHTML='';const filtered=modules.filter(m=>[m.name,m.desc,...m.summaries.flatMap(s=>[s.title,s.body])].join(' ').toLowerCase().includes(q));document.getElementById('total').textContent=`${modules.length} مواد · ${modules.reduce((n,m)=>n+m.summaries.length,0)} ملخصات`;document.getElementById('empty').classList.toggle('hide',filtered.length>0);filtered.forEach(m=>{const div=document.createElement('article');div.className='card';div.innerHTML=`<div class="emoji">${esc(m.icon)}</div><h3>${esc(m.name)}</h3><p>${esc(m.desc)}</p><span class="count">${m.summaries.length} résumé(s)</span><div class="actions"><button class="primary" data-act="addsum" data-id="${esc(m.id)}">＋ résumé</button><button class="soft" data-act="editmod" data-id="${esc(m.id)}">Modifier</button><button class="danger" data-act="delmod" data-id="${esc(m.id)}">Supprimer</button></div>`;if(m.summaries.length){const sd=document.createElement('div');sd.className='summary-list';m.summaries.forEach(s=>{const row=document.createElement('div');row.className='summary-row';row.innerHTML=`<span>📄 ${esc(s.title)}</span><button class="soft" data-act="readsum" data-id="${esc(m.id)}" data-sid="${esc(s.id)}">فتح</button>`;sd.appendChild(row)});div.appendChild(sd)}list.appendChild(div)})}
-function openM(id){document.getElementById(id).classList.add('open')}function closeM(id){document.getElementById(id).classList.remove('open')}
-async function initFirebase(){if(!window.firebase){setStatus('لا إنترنت');return}if(!fbApp)fbApp=firebase.initializeApp(firebaseConfig);fbAuth=fbApp.auth();fbDb=fbApp.database();fbAuth.onAuthStateChanged(async user=>{if(remoteListener&&currentUser){try{fbDb.ref('users/'+currentUser.uid+'/modules').off('value',remoteListener)}catch(e){}}currentUser=user;remoteListener=null;remoteReady=false;if(!user){document.getElementById('loginBtn').textContent='☁️ ربط Google والمزامنة';document.getElementById('syncEmail').textContent='غير مربوط بحساب Google';setStatus('محلي فقط — سجل الدخول للمزامنة');return}document.getElementById('loginBtn').textContent='تسجيل الخروج';document.getElementById('syncEmail').textContent='مربوط: '+(user.email||'Google');setStatus('كنجيب البيانات من السحابة...');const ref=fbDb.ref('users/'+user.uid+'/modules');try{const snap=await ref.once('value');const remote=normalize(snap.val());if(remote&&remote.length>0){modules=remote;saveLocal()}else{await ref.set(modules)}render();remoteReady=true;setStatus('متزامن مع Firebase ✓');remoteListener=snap2=>{if(!remoteReady||applyingRemote)return;const val=normalize(snap2.val());if(!val)return;if(JSON.stringify(val)!==JSON.stringify(modules)){applyingRemote=true;modules=val;saveLocal();render();applyingRemote=false;setStatus('تحدّث من جهاز آخر ✓')}};ref.on('value',remoteListener)}catch(e){setStatus('خطأ Realtime DB: '+e.message+' — فعّل Rules')}});try{await fbAuth.getRedirectResult()}catch(e){setStatus('خطأ دخول: '+e.message)}}
-document.getElementById('addModule').onclick=()=>{editModuleId=null;document.getElementById('moduleTitle').textContent='مادة جديدة';document.getElementById('moduleName').value='';document.getElementById('moduleDesc').value='';openM('moduleModal')};
-document.getElementById('saveModule').onclick=()=>{const name=document.getElementById('moduleName').value.trim();if(!name){alert('كتب اسم المادة');return}const desc=document.getElementById('moduleDesc').value.trim();if(editModuleId){const m=modules.find(x=>x.id===editModuleId);if(m){m.name=name;m.desc=desc}}else modules.push({id:makeId(),name,desc,icon:'📘',summaries:[]});persist();render();closeM('moduleModal')};
-document.getElementById('saveSummary').onclick=()=>{const title=document.getElementById('summaryName').value.trim(),body=document.getElementById('summaryBody').value.trim();if(!title||!body){alert('كمل العنوان والمحتوى');return}const m=modules.find(x=>x.id===summaryModuleId);if(!m)return;if(editSummaryId){const s=m.summaries.find(x=>x.id===editSummaryId);if(s){s.title=title;s.body=body}}else m.summaries.push({id:makeId(),title,body});persist();render();closeM('summaryModal')};
-document.getElementById('cards').addEventListener('click',e=>{const b=e.target.closest('button[data-act]');if(!b)return;const m=modules.find(x=>x.id===b.dataset.id);if(!m)return;if(b.dataset.act==='addsum'){summaryModuleId=m.id;editSummaryId=null;document.getElementById('summaryTitle').textContent='إضافة résumé — '+m.name;document.getElementById('summaryName').value='';document.getElementById('summaryBody').value='';openM('summaryModal')}if(b.dataset.act==='editmod'){editModuleId=m.id;document.getElementById('moduleTitle').textContent='تعديل المادة';document.getElementById('moduleName').value=m.name;document.getElementById('moduleDesc').value=m.desc||'';openM('moduleModal')}if(b.dataset.act==='delmod'&&confirm('تحذف هاد المادة؟')){modules=modules.filter(x=>x.id!==m.id);persist();render()}if(b.dataset.act==='readsum'){const s=m.summaries.find(x=>x.id===b.dataset.sid);if(!s)return;readerModuleId=m.id;readerSummaryId=s.id;document.getElementById('readerTitle').textContent=m.name+' — '+s.title;document.getElementById('readerBody').textContent=s.body;openM('readerModal')}});
-document.getElementById('editFromReader').onclick=()=>{const m=modules.find(x=>x.id===readerModuleId),s=m?.summaries.find(x=>x.id===readerSummaryId);if(!m||!s)return;summaryModuleId=m.id;editSummaryId=s.id;document.getElementById('summaryTitle').textContent='تعديل الملخص';document.getElementById('summaryName').value=s.title;document.getElementById('summaryBody').value=s.body;closeM('readerModal');openM('summaryModal')};
-document.getElementById('deleteFromReader').onclick=()=>{const m=modules.find(x=>x.id===readerModuleId);if(!m||!confirm('تحذف هاد الملخص؟'))return;m.summaries=m.summaries.filter(s=>s.id!==readerSummaryId);persist();render();closeM('readerModal')};
-document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeM(b.dataset.close));document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m.id)}));document.getElementById('search').addEventListener('input',render);
-document.getElementById('loginBtn').onclick=async()=>{if(!fbAuth)await initFirebase();try{if(currentUser){await fbAuth.signOut();return}setStatus('كنوجهك ل Google...');await fbAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())}catch(e){setStatus('خطأ: '+e.message)}};
-document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({app:'EPS StudyBox',version:1,exportedAt:new Date().toISOString(),modules},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='eps-studybox-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();document.getElementById('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text()),raw=Array.isArray(data)?data:data.modules;const valid=normalize(raw);if(!valid)throw Error('invalid');if(confirm('يعوض الحالي؟')){modules=valid;persist();render()}}catch(err){alert('ملف غير صالح')}e.target.value=''};
-saveLocal();render();initFirebase();
-</script></body></html>
+:root{--green:#153e35;--green2:#2a5b4e;--gold:#d6a666;--bg:#f5faef;--ink:#17231f;--muted:#66795e}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;z-index:10;background:var(--green);color:#fff;padding:10px}
+.wrap{max-width:1100px;margin:auto;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.brand{font-weight:bold}.toolbar{display:flex;gap:8px;padding:12px;background:#fff;flex-wrap:wrap}
+input,button{padding:8px 12px;border-radius:8px;border:1px solid #ccc}
+button.primary{background:var(--green);color:#fff;border:none;cursor:pointer}
+button.soft{background:#eef5e8;border:1px solid #cfe3c2}
+.syncbar{display:flex;gap:10px;align-items:center;background:#fff;padding:10px;margin:10px;border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:10px}
+.card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.muted{color:var(--muted)} #status{font-weight:bold}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">ETUDE • ORGANISATION • RÉVISION</div><div>EPS StudyBox</div></div></header>
+<div class="toolbar">
+<input id="search" placeholder="قلب على موديل...">
+<button class="primary" id="addModule">+ إضافة موديل</button>
+<button class="soft" id="exportBtn">تصدير</button>
+</div>
+<div class="syncbar">
+<div id="syncEmail">غير مربوط - محلي فقط - سجل الدخول لحفظ بياناتك</div>
+<div id="syncStatus" class="muted">محلي</div>
+<div id="total" class="muted"></div>
+<button id="loginBtn" class="primary">ربط Google ✅</button>
+<button id="logoutBtn" class="soft" style="display:none">خروج</button>
+</div>
+<main class="wrap"><div id="cards" class="cards"></div><div id="empty" style="padding:20px">لا يوجد موديلات بعد - اضف واحد</div></main>
+
+<script type="module">
+// ========= FIREBASE CONFIG - BDL HNA B DYALK =========
+const firebaseConfig = {
+  apiKey: "AIzaSyA-PLACEHOLDER-BDL-B-DYALK",
+  authDomain: "eps-studybox.firebaseapp.com",
+  projectId: "eps-studybox",
+  storageBucket: "eps-studybox.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123:web:abc"
+};
+// Sir l: https://console.firebase.google.com/project/eps-studybox/settings/general
+// w copier Config dyalk w dir paste hna ^^^^
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+let modules = JSON.parse(localStorage.getItem('eps_modules')||'[]');
+
+function render(){
+  const cards = document.getElementById('cards');
+  const empty = document.getElementById('empty');
+  document.getElementById('total').innerText = modules.length + ' module(s)';
+  if(!modules.length){cards.innerHTML=''; empty.style.display='block'; return;}
+  empty.style.display='none';
+  cards.innerHTML = modules.map(m=>`<div class="card"><h3>${m.name}</h3><p class="muted">${m.desc||''}</p><button onclick="deleteModule('${m.id}')">حذف</button></div>`).join('');
+}
+window.deleteModule = async (id)=>{
+  modules = modules.filter(x=>x.id!=id);
+  localStorage.setItem('eps_modules', JSON.stringify(modules));
+  render();
+  if(currentUser){ await deleteDoc(doc(db, 'users', currentUser.uid, 'modules', id)); }
+}
+
+document.getElementById('addModule').onclick = async ()=>{
+  const name = prompt('اسم الموديل:'); if(!name) return;
+  const mod = {id:Date.now().toString(), name, desc:''};
+  modules.push(mod);
+  localStorage.setItem('eps_modules', JSON.stringify(modules));
+  render();
+  if(currentUser){ await setDoc(doc(db, 'users', currentUser.uid, 'modules', mod.id), mod); }
+};
+
+// ==== LOGIN JDID KAYKHDEM 100% ====
+document.getElementById('loginBtn').onclick = ()=>{
+  console.log('kanmchi l Google...');
+  signInWithRedirect(auth, provider);
+};
+
+document.getElementById('logoutBtn').onclick = ()=> signOut(auth);
+
+getRedirectResult(auth).then(res=>{
+  if(res) console.log('Rja3na mn Google', res.user.email);
+}).catch(e=>{ alert('Erreur login: '+e.message); console.error(e); });
+
+onAuthStateChanged(auth, async (user)=>{
+  if(user){
+    currentUser = user;
+    document.getElementById('syncEmail').innerHTML = 'مربوط: ' + user.email + ' ✅';
+    document.getElementById('syncStatus').innerText = 'مزامنة';
+    document.getElementById('loginBtn').style.display='none';
+    document.getElementById('logoutBtn').style.display='inline-block';
+    // jib data mn Firebase
+    try{
+      const snap = await getDocs(collection(db, 'users', user.uid, 'modules'));
+      if(!snap.empty){
+        modules = snap.docs.map(d=>d.data());
+        localStorage.setItem('eps_modules', JSON.stringify(modules));
+        render();
+      }
+    }catch(e){console.error(e)}
+  }else{
+    currentUser = null;
+    document.getElementById('syncEmail').innerText = 'غير مربوط - محلي فقط';
+    document.getElementById('syncStatus').innerText = 'محلي';
+    document.getElementById('loginBtn').style.display='inline-block';
+    document.getElementById('logoutBtn').style.display='none';
+  }
+});
+
+render();
+</script>
+</body>
+</html>
