@@ -1,56 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EPS StudyBox</title>
 <meta name="theme-color" content="#153e35">
 <style>
-:root{--green:#153e35;--green2:#2a5b4e;--gold:#d6a666;--bg:#f5faef;--ink:#17231f;--muted:#66795e}
+:root{--green:#153e35;--gold:#d8b66b;--bg:#f5f4ef;--ink:#17231f;--muted:#66795e}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma;background:var(--bg);color:var(--ink)}
-header{position:sticky;top:0;z-index:10;background:var(--green);color:#fff;padding:10px}
-.wrap{max-width:1100px;margin:auto;display:flex;gap:10px;align-items:center;justify-content:space-between}
-.brand{font-weight:bold}.toolbar{display:flex;gap:8px;padding:12px;background:#fff;flex-wrap:wrap}
-input,button{padding:8px 12px;border-radius:8px;border:1px solid #ccc}
-button.primary{background:var(--green);color:#fff;border:none;cursor:pointer}
-button.soft{background:#eef5e8;border:1px solid #cfe3c2}
-.syncbar{display:flex;gap:10px;align-items:center;background:#fff;padding:10px;margin:10px;border-radius:10px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:10px}
-.card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.muted{color:var(--muted)} #status{font-weight:bold}
+header{background:var(--green);color:#fff;padding:12px;position:sticky;top:0}
+.wrap{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+.toolbar{display:flex;gap:8px;padding:12px;background:#fff;flex-wrap:wrap;max-width:1100px;margin:auto}
+input,button{padding:10px 14px;border-radius:10px;border:1px solid #ccc}
+button.primary{background:var(--green);color:#fff;border:none;cursor:pointer;font-weight:bold}
+button.soft{background:#eef5e8;border:1px solid #cfe3c2;cursor:pointer}
+.syncbar{display:flex;gap:12px;align-items:center;background:#fff;padding:12px;margin:12px auto;border-radius:12px;max-width:1100px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding:12px;max-width:1100px;margin:auto}
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.muted{color:var(--muted)}#syncEmail{font-weight:bold}
+#cards:empty::after{content:"لا يوجد موديلات بعد"}
 </style>
 </head>
 <body>
-<header><div class="wrap"><div class="brand">ETUDE • ORGANISATION • RÉVISION</div><div>EPS StudyBox</div></div></header>
+<header><div class="wrap"><div>ETUDE • ORGANISATION • RÉVISION</div><div>EPS StudyBox</div></div></header>
 <div class="toolbar">
-<input id="search" placeholder="قلب على موديل...">
+<input id="search" placeholder="ابحث عن Module أو résumé...">
 <button class="primary" id="addModule">+ إضافة موديل</button>
 <button class="soft" id="exportBtn">تصدير</button>
 </div>
 <div class="syncbar">
-<div id="syncEmail">غير مربوط - محلي فقط - سجل الدخول لحفظ بياناتك</div>
-<div id="syncStatus" class="muted">محلي</div>
-<div id="total" class="muted"></div>
-<button id="loginBtn" class="primary">ربط Google ✅</button>
+<div id="syncEmail">غير مربوط - محلي فقط</div>
+<div id="syncStatus" class="muted">محلي...</div>
+<div id="total" class="muted" style="margin-right:auto">0 modules</div>
+<button id="loginBtn" class="primary">ربط Google</button>
 <button id="logoutBtn" class="soft" style="display:none">خروج</button>
 </div>
-<main class="wrap"><div id="cards" class="cards"></div><div id="empty" style="padding:20px">لا يوجد موديلات بعد - اضف واحد</div></main>
+<main><div id="cards" class="cards"></div><div id="empty" style="text-align:center;padding:30px" class="muted">أضف أول موديل لك</div></main>
+<footer style="text-align:center;padding:20px" class="muted">EPS StudyBox - Realtime DB</footer>
 
 <script type="module">
-// ========= FIREBASE CONFIG - BDL HNA B DYALK =========
-const firebaseConfig = {
-  apiKey: "AIzaSyA-PLACEHOLDER-BDL-B-DYALK",
-  authDomain: "eps-studybox.firebaseapp.com",
-  projectId: "eps-studybox",
-  storageBucket: "eps-studybox.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123:web:abc"
-};
-// Sir l: https://console.firebase.google.com/project/eps-studybox/settings/general
-// w copier Config dyalk w dir paste hna ^^^^
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBn6SY4K3JX9VFebs-YpxjzvPuEOk7bZEQ",
+  authDomain: "eps-studybox.firebaseapp.com",
+  databaseURL: "https://eps-studybox-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "eps-studybox",
+  storageBucket: "eps-studybox.firebasestorage.app",
+  messagingSenderId: "873490334885",
+  appId: "1:873490334885:web:abbf1ba26c1b6fbc87b94c",
+  measurementId: "G-XK38RSD7G7"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -63,16 +64,16 @@ let modules = JSON.parse(localStorage.getItem('eps_modules')||'[]');
 function render(){
   const cards = document.getElementById('cards');
   const empty = document.getElementById('empty');
-  document.getElementById('total').innerText = modules.length + ' module(s)';
+  document.getElementById('total').innerText = modules.length + ' modules';
   if(!modules.length){cards.innerHTML=''; empty.style.display='block'; return;}
   empty.style.display='none';
-  cards.innerHTML = modules.map(m=>`<div class="card"><h3>${m.name}</h3><p class="muted">${m.desc||''}</p><button onclick="deleteModule('${m.id}')">حذف</button></div>`).join('');
+  cards.innerHTML = modules.map(m=>`<div class="card"><h3>${m.name}</h3><p class="muted">${m.desc||''}</p><div style="margin-top:10px"><button class="soft" onclick="deleteModule('${m.id}')">حذف</button></div></div>`).join('');
 }
 window.deleteModule = async (id)=>{
   modules = modules.filter(x=>x.id!=id);
   localStorage.setItem('eps_modules', JSON.stringify(modules));
   render();
-  if(currentUser){ await deleteDoc(doc(db, 'users', currentUser.uid, 'modules', id)); }
+  if(currentUser){ try{ await deleteDoc(doc(db, 'users', currentUser.uid, 'modules', id)); }catch(e){} }
 }
 
 document.getElementById('addModule').onclick = async ()=>{
@@ -81,38 +82,32 @@ document.getElementById('addModule').onclick = async ()=>{
   modules.push(mod);
   localStorage.setItem('eps_modules', JSON.stringify(modules));
   render();
-  if(currentUser){ await setDoc(doc(db, 'users', currentUser.uid, 'modules', mod.id), mod); }
+  if(currentUser){ try{ await setDoc(doc(db, 'users', currentUser.uid, 'modules', mod.id), mod); }catch(e){console.error(e)} }
 };
 
-// ==== LOGIN JDID KAYKHDEM 100% ====
-document.getElementById('loginBtn').onclick = ()=>{
-  console.log('kanmchi l Google...');
-  signInWithRedirect(auth, provider);
-};
-
+// LOGIN YKHDEM 100%
+document.getElementById('loginBtn').onclick = ()=>{ signInWithRedirect(auth, provider); };
 document.getElementById('logoutBtn').onclick = ()=> signOut(auth);
 
-getRedirectResult(auth).then(res=>{
-  if(res) console.log('Rja3na mn Google', res.user.email);
-}).catch(e=>{ alert('Erreur login: '+e.message); console.error(e); });
+getRedirectResult(auth).then(r=>{ if(r) console.log('Connected', r.user.email); }).catch(e=>alert('Erreur: '+e.message));
 
 onAuthStateChanged(auth, async (user)=>{
   if(user){
     currentUser = user;
-    document.getElementById('syncEmail').innerHTML = 'مربوط: ' + user.email + ' ✅';
+    document.getElementById('syncEmail').innerText = 'مربوط: ' + user.email + ' ✅';
     document.getElementById('syncStatus').innerText = 'مزامنة';
     document.getElementById('loginBtn').style.display='none';
     document.getElementById('logoutBtn').style.display='inline-block';
-    // jib data mn Firebase
     try{
       const snap = await getDocs(collection(db, 'users', user.uid, 'modules'));
       if(!snap.empty){
-        modules = snap.docs.map(d=>d.data());
-        localStorage.setItem('eps_modules', JSON.stringify(modules));
+        const cloud = snap.docs.map(d=>d.data());
+        if(cloud.length > modules.length){ modules = cloud; localStorage.setItem('eps_modules', JSON.stringify(modules)); }
+        else { for(const m of modules){ await setDoc(doc(db, 'users', user.uid, 'modules', m.id), m); } }
         render();
-      }
+      } else { for(const m of modules){ await setDoc(doc(db, 'users', user.uid, 'modules', m.id), m); } }
     }catch(e){console.error(e)}
-  }else{
+  } else {
     currentUser = null;
     document.getElementById('syncEmail').innerText = 'غير مربوط - محلي فقط';
     document.getElementById('syncStatus').innerText = 'محلي';
@@ -120,7 +115,6 @@ onAuthStateChanged(auth, async (user)=>{
     document.getElementById('logoutBtn').style.display='none';
   }
 });
-
 render();
 </script>
 </body>
